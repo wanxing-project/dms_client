@@ -9,3 +9,9 @@ pro create myapp(这一步需要选择 umi 版本，和模板类型，我选了 
 将 myapp 内的内容放到心仪的文件下 main 后再执行下一步（用压缩和解压的方法转移文件位置会快一些）
 
 npm i
+
+npm run start
+
+运行成功后，添加页面，提交表单，给后台发送请求需要安装 axios
+
+npm i axios
