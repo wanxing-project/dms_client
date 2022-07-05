@@ -1,6 +1,7 @@
 import { validateMessages } from '@/common/form';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Form, Input, InputNumber, message, Modal, Select, Table } from 'antd';
+import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { add } from './api';
 import styles from './index.less'; // 告诉 umi 编译这个 less
@@ -70,9 +71,15 @@ const Demo1: React.FC = () => {
    * 请求后台获取
    */
   function getListData() {
-    let list: DataSource[] = dataSource1;
+    // let list: DataSource[] = dataSource1;
+    // for (let i = 0; i < 10; i++) {
+    //   list = list.concat(list);
+    // }
+    const list: any = [];
     for (let i = 0; i < 10; i++) {
-      list = list.concat(list);
+      const item: any = cloneDeep(dataSource1[0]);
+      item.key = i + 1;
+      list.push(item);
     }
     setDataSource(list);
   }
@@ -135,7 +142,7 @@ const Demo1: React.FC = () => {
             {text.map((item, index) => {
               return (
                 <div
-                  key={index}
+                  key={`key${index}`}
                   style={{ width: '100px', height: '100px', marginLeft: '4px', overflow: 'hidden' }}
                 >
                   <img style={{ width: '100%' }} src={item} />
@@ -154,69 +161,68 @@ const Demo1: React.FC = () => {
     <div className={styles.container}>
       {/* 搜索区域 */}
       <div className={styles.search_area}>
-        <Form.Item
-          className={styles.search_box_number}
-          label="ID"
-          name="sqlId"
-          tooltip={'唯一标志id'}
-        >
-          <InputNumber min={1} />
-        </Form.Item>
-        <Form.Item className={styles.search_box} label="名称" name="sqlId">
-          <Input />
-        </Form.Item>
-        <Form.Item className={styles.search_box} label="地址" name="address">
-          <Input />
-        </Form.Item>
-        <Form.Item className={styles.search_box} label="搜索下拉框" name="address">
-          <Select
-            showSearch
-            // value={value}
-            // placeholder={props.placeholder}
-            // style={props.style}
-            defaultActiveFirstOption={false}
-            showArrow={false}
-            filterOption={false}
-            onSearch={handleSearch}
-            onChange={handleChange}
-            notFoundContent={null}
+        <Form>
+          <Form.Item
+            className={styles.search_box_number}
+            label="ID"
+            name="sqlId"
+            tooltip={'唯一标志id'}
           >
-            {options}
-          </Select>
-        </Form.Item>
-        <Form.Item className={styles.search_box} label="下拉框" name="address">
-          <Select
-            allowClear // 支持清除
-            showSearch // 使单选模式可搜索
-            placeholder="下拉选择" // 选择框默认文本
-          >
-            <Option value="1">Not Identified</Option>
-            <Option value="2">Closed</Option>
-            <Option value="3">Communicated</Option>
-            <Option value="4">Identified</Option>
-            <Option value="5">Resolved</Option>
-            <Option value="6">Cancelled</Option>
-          </Select>
-        </Form.Item>
+            <InputNumber min={1} />
+          </Form.Item>
+          <Form.Item className={styles.search_box} label="名称" name="sqlId">
+            <Input />
+          </Form.Item>
+          <Form.Item className={styles.search_box} label="地址" name="address">
+            <Input />
+          </Form.Item>
+          <Form.Item className={styles.search_box} label="搜索下拉框" name="address">
+            <Select
+              showSearch
+              // value={value}
+              // placeholder={props.placeholder}
+              // style={props.style}
+              defaultActiveFirstOption={false}
+              showArrow={false}
+              filterOption={false}
+              onSearch={handleSearch}
+              onChange={handleChange}
+              notFoundContent={null}
+            >
+              {options}
+            </Select>
+          </Form.Item>
+          <Form.Item className={styles.search_box} label="下拉框" name="address">
+            <Select
+              allowClear // 支持清除
+              showSearch // 使单选模式可搜索
+              placeholder="下拉选择" // 选择框默认文本
+            >
+              <Option value="1">Not Identified</Option>
+              <Option value="2">Closed</Option>
+              <Option value="3">Communicated</Option>
+              <Option value="4">Identified</Option>
+              <Option value="5">Resolved</Option>
+              <Option value="6">Cancelled</Option>
+            </Select>
+          </Form.Item>
+        </Form>
       </div>
       {/* 按钮区 */}
       <div className={styles.btn_area}>
-        <Form.Item className={styles.btn}>
-          <Button type="primary" icon={<SearchOutlined />}>
-            搜索
-          </Button>
-        </Form.Item>
-        <Form.Item className={styles.btn}>
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() => {
-              setShowAddModal(true);
-            }}
-          >
-            新增
-          </Button>
-        </Form.Item>
+        <Button className={styles.btn} type="primary" icon={<SearchOutlined />}>
+          搜索
+        </Button>
+        <Button
+          className={styles.btn}
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={() => {
+            setShowAddModal(true);
+          }}
+        >
+          新增
+        </Button>
       </div>
       {/* 列表区 */}
       <Table className={styles.table_area} dataSource={dataSource} columns={columns} />
