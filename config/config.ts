@@ -16,7 +16,7 @@ export default defineConfig({
   },
   layout: {
     // https://umijs.org/zh-CN/plugins/plugin-layout
-    locale: true,
+    locale: false, // Ant Design Pro V5版本去掉国际化
     siderWidth: 208,
     ...defaultSettings,
   },
