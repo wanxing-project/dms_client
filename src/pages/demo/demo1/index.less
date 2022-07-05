@@ -1,61 +1,58 @@
-// @import '~antd/lib/style/themes/default.less';
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
 
-// .container {
-//     display: flex;
-//     flex-direction: column;
-//     height: 100%;
-//     overflow: auto;
+  .search_area {
+    display: flex;
+    flex-wrap: wrap;
+    // justify-content: center; // 水平居中
+    align-items: center;
+    // 垂直居中
+    width: 100%;
+    height: 100%;
+    padding: 20px 20px 0 20px; // 上右下左
+    background-color: #dae8f6;
 
-//     .search_area {
-//         display: flex;
-//         flex-wrap: wrap;
-//         // justify-content: center; /* 水平居中 */
-//         align-items: center;
-//         /* 垂直居中 */
-//         width: 100%;
-//         height: 100%;
-//         padding: 20px 20px 0px 20px; // 上右下左
-//         background-color: #dae8f6;
+    .search_box_number {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      margin: 0 50px 20px 0; // 上右下左
+    }
 
-//         .search_box_number {
-//             display: flex;
-//             flex-wrap: wrap;
-//             width: 100%;
-//             margin: 0px 50px 20px 0px; // 上右下左
-//         }
+    .search_box {
+      display: flex;
+      flex-wrap: wrap;
+      // flex-wrap 属性指定 flex 元素单行显示还是多行显示
+      // nowrap: flex 的元素被摆放到到一行，这可能导致 flex 容器溢出。
+      // wrap: flex 元素 被打断到多个行中。
+      // wrap-reverse：和 wrap 的行为一样，但是 cross-start 和 cross-end 互换。
 
-//         .search_box {
-//             display: flex;
+      width: 250px;
+      margin: 0 50px 20px 0; // 上右下左
+    }
+  }
 
-//             flex-wrap: wrap;
-//             // flex-wrap 属性指定 flex 元素单行显示还是多行显示
-//             // nowrap: flex 的元素被摆放到到一行，这可能导致 flex 容器溢出。
-//             // wrap: flex 元素 被打断到多个行中。
-//             // wrap-reverse：和 wrap 的行为一样，但是 cross-start 和 cross-end 互换。
+  .btn_area {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin-top: 20px;
+    padding: 20px 20px 0 20px; // 上右下左
+    background-color: #dae8f6;
 
-//             width: 250px;
-//             margin: 0px 50px 20px 0px; // 上右下左
-//         }
-//     }
+    .btn {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 40px 20px 0; // 上右下左
+    }
+  }
 
-//     .btn_area {
-//         display: flex;
-//         flex-wrap: wrap;
-//         align-items: center;
-//         width: 100%;
-//         height: 100%;
-//         padding: 20px 20px 0px 20px; // 上右下左
-//         background-color: #dae8f6;
-//         margin-top: 20px;
-
-//         .btn {
-//             display: flex;
-//             flex-wrap: wrap;
-//             margin: 0px 40px 20px 0px; // 上右下左
-//         }
-//     }
-
-//     .table_area {
-//         margin-top: 20px;
-//     }
-// }
+  .table_area {
+    margin-top: 20px;
+  }
+}

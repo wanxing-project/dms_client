@@ -3,7 +3,8 @@ import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Form, Input, InputNumber, message, Modal, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { add } from './api';
-import styles from './index.less';
+import styles from './index.less'; // 告诉 umi 编译这个 less
+import { DataSource, SelectList } from './typing';
 
 const Demo1: React.FC = () => {
   const [dataSource, setDataSource] = useState<DataSource[]>([]);
@@ -30,7 +31,7 @@ const Demo1: React.FC = () => {
   useEffect(() => {
     initData();
     getListData();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   /**
    * 初始化数据
    */
