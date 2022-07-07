@@ -1,16 +1,14 @@
 import { validateMessages } from '@/common/form';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Form, Input, InputNumber, message, Modal, Select, Table } from 'antd';
-import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { add } from './api';
+import { add, getList } from './api';
 import styles from './index.less'; // 告诉 umi 编译这个 less
 import { DataSource, SelectList } from './typing';
 
 const Demo1: React.FC = () => {
   const [dataSource, setDataSource] = useState<DataSource[]>([]);
   const { Option } = Select;
-  let dataSource1: DataSource[] = [];
   let selectList: SelectList[] = [];
   const options = selectList.map((d) => <Option key={d.value}>{d.text}</Option>);
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
@@ -37,21 +35,6 @@ const Demo1: React.FC = () => {
    * 初始化数据
    */
   function initData() {
-    dataSource1 = [
-      {
-        sqlId: '1',
-        name: 'Mike',
-        address: '10 Downing Street',
-        imgs: [],
-      },
-      {
-        sqlId: '2',
-        name: 'John',
-        address: '10 Downing Street',
-        imgs: [],
-      },
-    ];
-
     selectList = [
       {
         value: 1,
@@ -70,18 +53,15 @@ const Demo1: React.FC = () => {
   /**
    * 请求后台获取
    */
-  function getListData() {
-    // let list: DataSource[] = dataSource1;
-    // for (let i = 0; i < 10; i++) {
-    //   list = list.concat(list);
+  async function getListData() {
+    const data: any = await getList({});
+    console.log('获取界面列表:', data);
+    // const len = data.length;
+    // for (let i = 0; i < len; i++) {
+    //   data[i].key = i;
     // }
-    const list: any = [];
-    for (let i = 0; i < 10; i++) {
-      const item: any = cloneDeep(dataSource1[0]);
-      item.key = i + 1;
-      list.push(item);
-    }
-    setDataSource(list);
+    // setDataSource(data);
+    setDataSource([]);
   }
 
   function handleSearch() {
