@@ -158,8 +158,8 @@ const Demo1: React.FC = () => {
   return (
     <div className={styles.container}>
       {/* 搜索区域 */}
-      <div className={styles.search_area}>
-        <Form>
+      <div>
+        <Form className={styles.search_area}>
           <Form.Item
             className={styles.search_box_number}
             label="ID"
