@@ -247,19 +247,16 @@ const Demo1: React.FC = () => {
           validateMessages={validateMessages}
           preserve={false}
         >
-          <Form.Item name="Name" label="名称" rules={[{ required: true }]}>
+          <Form.Item name="name" label="名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="Email" label="邮件" rules={[{ type: 'email' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="Age" label="年龄" rules={[{ type: 'number', min: 0, max: 99 }]}>
+          <Form.Item name="age" label="年龄" rules={[{ type: 'number', min: 0, max: 99 }]}>
             <InputNumber />
           </Form.Item>
-          <Form.Item name="Website" label="网站">
+          <Form.Item name="address" label="家庭住址">
             <Input />
           </Form.Item>
-          <Form.Item name="Introduction" label="介绍" rules={[{ required: true }]}>
+          <Form.Item name="moreInfo" label="补充说明">
             <Input.TextArea />
           </Form.Item>
         </Form>
