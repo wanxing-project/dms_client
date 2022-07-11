@@ -1,6 +1,6 @@
 import { validateMessages } from '@/common/form';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Form, Input, InputNumber, message, Modal, Select, Table } from 'antd';
+import { Button, Form, Image, Input, InputNumber, message, Modal, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { add, getList } from './api';
 import styles from './index.less'; // 告诉 umi 编译这个 less
@@ -54,14 +54,21 @@ const Demo1: React.FC = () => {
    * 请求后台获取
    */
   async function getListData() {
-    const data: any = await getList({});
-    console.log('获取界面列表:', data);
-    // const len = data.length;
-    // for (let i = 0; i < len; i++) {
-    //   data[i].key = i;
-    // }
-    // setDataSource(data);
-    setDataSource([]);
+    try {
+      const result: any = await getList({});
+      if (result.status === 200) {
+        if (result.data && Array.isArray(result.data)) {
+          const len = result.data.length;
+          for (let i = 0; i < len; i++) {
+            result.data[i].key = i;
+          }
+          setDataSource(result.data);
+        }
+      }
+    } catch (err) {
+      message.error('系统错误');
+      console.log('系统错误:', err);
+    }
   }
 
   function handleSearch() {
@@ -93,8 +100,8 @@ const Demo1: React.FC = () => {
   const columns: any = [
     {
       title: 'id',
-      dataIndex: 'sqlId',
-      key: 'sqlId',
+      dataIndex: 'id',
+      key: 'id',
       with: 120,
       align: 'center',
     },
@@ -114,23 +121,34 @@ const Demo1: React.FC = () => {
       title: '图片',
       dataIndex: 'imgs',
       key: 'imgs',
-      render: (text: string[]) => {
+      render: (text: string) => {
         //text：该键的值; record：该列的值
         // console.log(text);
-        return (
-          <div style={{ display: 'flex' }}>
-            {text.map((item, index) => {
-              return (
-                <div
-                  key={`key${index}`}
-                  style={{ width: '100px', height: '100px', marginLeft: '4px', overflow: 'hidden' }}
-                >
-                  <img style={{ width: '100%' }} src={item} />
-                </div>
-              );
-            })}
-          </div>
-        );
+        if (text) {
+          const list = JSON.parse(text);
+          return (
+            <div style={{ display: 'flex' }}>
+              {list?.map((item: string, index: number) => {
+                console.log(item);
+                return (
+                  <div
+                    key={`key${index}`}
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      marginLeft: '4px',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <Image style={{ width: '100%' }} src={item} />
+                  </div>
+                );
+              })}
+            </div>
+          );
+        } else {
+          return null;
+        }
       },
     },
   ];
