@@ -13,7 +13,7 @@ export async function get(path: string, params: object) {
     .then(function (response: any) {
       console.log('返回结果：', response);
       if (response.status === 200) {
-        return response;
+        return response.data;
       } else {
         return { status: 0, message: '系统错误' };
       }
@@ -37,7 +37,7 @@ export async function post(path: string, params: object) {
     .then(function (response: any) {
       console.log('返回结果：', response);
       if (response.status === 200) {
-        return response;
+        return response.data;
       } else {
         return { status: 0, message: '系统错误' };
       }

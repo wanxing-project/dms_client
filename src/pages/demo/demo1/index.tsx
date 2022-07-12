@@ -29,7 +29,7 @@ const Demo1: React.FC = () => {
    */
   useEffect(() => {
     initData();
-    getListData();
+    search();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   /**
    * 初始化数据
@@ -53,7 +53,7 @@ const Demo1: React.FC = () => {
   /**
    * 请求后台获取
    */
-  async function getListData() {
+  async function search() {
     try {
       const result: any = await getList({});
       if (result.status === 200) {
@@ -83,11 +83,15 @@ const Demo1: React.FC = () => {
     // formData.getFieldsValue() 等于 values
     const param = values;
     try {
+      console.log(param);
       const result: any = await add(param);
       console.log(result);
       if (result.status === 200) {
         message.success('添加成功');
         setShowAddModal(false);
+        search();
+      } else {
+        message.error(result.message);
       }
     } catch (err) {
       message.error('系统错误');
@@ -208,7 +212,14 @@ const Demo1: React.FC = () => {
       </div>
       {/* 按钮区 */}
       <div className={styles.btn_area}>
-        <Button className={styles.btn} type="primary" icon={<SearchOutlined />}>
+        <Button
+          className={styles.btn}
+          type="primary"
+          icon={<SearchOutlined />}
+          onClick={() => {
+            search();
+          }}
+        >
           搜索
         </Button>
         <Button
