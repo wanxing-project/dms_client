@@ -8,6 +8,14 @@ export interface DataSource {
   imgs: string[];
 }
 
+export interface SearchData {
+  id?: string;
+  name?: string;
+  address?: string;
+  age?: string;
+  moreInfo?: string;
+}
+
 /**
  * 下拉框数据结构
  */

@@ -1,7 +1,7 @@
 const axios = require('axios'); // Axios 是一个基于 promise 网络请求库
 
 export async function get(path: string, params: object) {
-  const _path = `http://127.0.0.1:7002${path}`;
+  const _path = `http://127.0.0.1:7001${path}`;
   console.log('请求地址：', _path);
   // let res = await axios.post(_path, params)
   const res = await axios({
@@ -11,8 +11,8 @@ export async function get(path: string, params: object) {
     withCredentials: true, // 携带跨域cookie
   })
     .then(function (response: any) {
-      console.log('返回结果：', response);
       if (response.status === 200) {
+        console.log('返回结果：', response.data);
         return response.data;
       } else {
         return { status: 0, message: '系统错误' };
@@ -25,7 +25,7 @@ export async function get(path: string, params: object) {
 }
 
 export async function post(path: string, params: object) {
-  const _path = `http://127.0.0.1:7002${path}`;
+  const _path = `http://127.0.0.1:7001${path}`;
   console.log('请求地址：', _path);
   // let res = await axios.post(_path, params)
   const res = await axios({
@@ -35,8 +35,8 @@ export async function post(path: string, params: object) {
     withCredentials: true, // 携带跨域cookie
   })
     .then(function (response: any) {
-      console.log('返回结果：', response);
       if (response.status === 200) {
+        console.log('返回结果：', response.data);
         return response.data;
       } else {
         return { status: 0, message: '系统错误' };

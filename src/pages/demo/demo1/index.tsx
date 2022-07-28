@@ -1,10 +1,10 @@
-import { validateMessages } from '@/common/form';
+import { paginationProps, validateMessages } from '@/common/form';
 import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Form, Image, Input, InputNumber, message, Modal, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { add, getList } from './api';
 import styles from './index.less'; // 告诉 umi 编译这个 less
-import { DataSource, SelectList } from './typing';
+import { DataSource, SearchData, SelectList } from './typing';
 
 const Demo1: React.FC = () => {
   const [dataSource, setDataSource] = useState<DataSource[]>([]);
@@ -13,6 +13,8 @@ const Demo1: React.FC = () => {
   const options = selectList.map((d) => <Option key={d.value}>{d.text}</Option>);
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [formData] = Form.useForm();
+  const [searchData] = Form.useForm();
+  const [loading, setLoading] = useState(false);
   const layout = {
     // 会分成24等分 labelCol 和 wrapperCol 是几就分几份 没分到的地方留白
     labelCol: {
@@ -54,16 +56,25 @@ const Demo1: React.FC = () => {
    * 请求后台获取
    */
   async function search() {
+    setLoading(true);
     try {
-      const result: any = await getList({});
+      const param: SearchData = searchData.getFieldsValue();
+      console.log('param', param);
+      const searchParam = {
+        condition: param,
+        size: paginationProps.pageSize,
+        pageIndex: paginationProps.current,
+      };
+      const result: any = await getList(searchParam);
       if (result.status === 200) {
         if (result.data && Array.isArray(result.data)) {
-          const len = result.data.length;
-          for (let i = 0; i < len; i++) {
-            result.data[i].key = i;
-          }
           setDataSource(result.data);
+          setLoading(false);
+        } else {
+          setDataSource([]);
         }
+      } else {
+        message.error(result.message);
       }
     } catch (err) {
       message.error('系统错误');
@@ -133,7 +144,6 @@ const Demo1: React.FC = () => {
           return (
             <div style={{ display: 'flex' }}>
               {list?.map((item: string, index: number) => {
-                console.log(item);
                 return (
                   <div
                     key={`key${index}`}
@@ -155,6 +165,12 @@ const Demo1: React.FC = () => {
         }
       },
     },
+    {
+      title: '其他信息',
+      dataIndex: 'moreInfo',
+      key: 'moreInfo',
+      align: 'center',
+    },
   ];
   /**
    * 界面布局
@@ -163,22 +179,39 @@ const Demo1: React.FC = () => {
     <div className={styles.container}>
       {/* 搜索区域 */}
       <div>
-        <Form className={styles.search_area}>
+        <Form className={styles.search_area} form={searchData}>
           <Form.Item
             className={styles.search_box_number}
             label="ID"
-            name="sqlId"
+            name="id"
             tooltip={'唯一标志id'}
           >
             <InputNumber min={1} />
           </Form.Item>
-          <Form.Item className={styles.search_box} label="名称" name="sqlId">
+          <Form.Item className={styles.search_box} label="名称" name="name">
             <Input />
           </Form.Item>
           <Form.Item className={styles.search_box} label="地址" name="address">
             <Input />
           </Form.Item>
-          <Form.Item className={styles.search_box} label="搜索下拉框" name="address">
+          <Form.Item className={styles.search_box} label="年龄" name="age">
+            <Select
+              allowClear // 支持清除
+              showSearch // 使单选模式可搜索
+              placeholder="下拉选择" // 选择框默认文本
+            >
+              <Option value="177">{'<18'}</Option>
+              <Option value="18">{18}</Option>
+              <Option value="19">{19}</Option>
+              <Option value="20">{20}</Option>
+              <Option value="21">{21}</Option>
+              <Option value="22">{22}</Option>
+              <Option value="23">{23}</Option>
+              <Option value="24">{24}</Option>
+              <Option value="255">{'>24'}</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item className={styles.search_box} label="其他信息" name="moreInfo">
             <Select
               showSearch
               // value={value}
@@ -192,20 +225,6 @@ const Demo1: React.FC = () => {
               notFoundContent={null}
             >
               {options}
-            </Select>
-          </Form.Item>
-          <Form.Item className={styles.search_box} label="下拉框" name="address">
-            <Select
-              allowClear // 支持清除
-              showSearch // 使单选模式可搜索
-              placeholder="下拉选择" // 选择框默认文本
-            >
-              <Option value="1">Not Identified</Option>
-              <Option value="2">Closed</Option>
-              <Option value="3">Communicated</Option>
-              <Option value="4">Identified</Option>
-              <Option value="5">Resolved</Option>
-              <Option value="6">Cancelled</Option>
             </Select>
           </Form.Item>
         </Form>
@@ -234,7 +253,15 @@ const Demo1: React.FC = () => {
         </Button>
       </div>
       {/* 列表区 */}
-      <Table className={styles.table_area} dataSource={dataSource} columns={columns} />
+      <Table
+        className={styles.table_area}
+        dataSource={dataSource}
+        columns={columns}
+        rowKey={(record) => record.id}
+        loading={loading}
+        bordered
+        pagination={paginationProps}
+      />
       {/* 弹框区 */}
       {/* <Modal /> 和 Form 一起配合使用时，设置 destroyOnClose 也不会在 Modal 关闭时销毁表单字段数据，需要设置 <Form preserve={false} />。 */}
       <Modal
