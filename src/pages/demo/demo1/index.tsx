@@ -13,6 +13,7 @@ const Demo1: React.FC = () => {
   const options = selectList.map((d) => <Option key={d.value}>{d.text}</Option>);
   const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [formData] = Form.useForm();
+  const [formDataValue, setFormDataValue] = useState<DataSource>();
   const [searchData] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const layout = {
@@ -109,6 +110,18 @@ const Demo1: React.FC = () => {
       console.log('系统错误:', err);
     }
   }
+
+  function openModifyPanel(record: DataSource) {
+    console.log('修改', record);
+    const data: DataSource = Object.assign(record, {});
+    setFormDataValue(data);
+    setShowAddModal(true);
+  }
+
+  function operate() {
+    console.log('发布，下架，删除');
+  }
+
   /**
    * 列表结构
    */
@@ -170,6 +183,26 @@ const Demo1: React.FC = () => {
       dataIndex: 'moreInfo',
       key: 'moreInfo',
       align: 'center',
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (text: string, record: DataSource) => (
+        <>
+          <Button
+            className={styles.action_btn}
+            type="primary"
+            onClick={() => {
+              openModifyPanel(record);
+            }}
+          >
+            修改
+          </Button>
+          <Button className={styles.action_btn} type="primary" onClick={operate}>
+            发布
+          </Button>
+        </>
+      ),
     },
   ];
   /**
@@ -282,9 +315,13 @@ const Demo1: React.FC = () => {
           name="nest-messages"
           form={formData}
           onFinish={onSubmit}
-          validateMessages={validateMessages}
+          validateMessages={validateMessages} // 为空数据校验
           preserve={false}
+          initialValues={formDataValue}
         >
+          <Form.Item name="id" label="id">
+            <InputNumber disabled />
+          </Form.Item>
           <Form.Item name="name" label="名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
